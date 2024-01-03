@@ -14,7 +14,7 @@ Download the correct ChromeDriver at https://chromedriver.chromium.org/downloads
 After downloading the zip file for ChromeDriver, unzip it and place the chromedriver executable in the same folder as the jjwxc-downloader script.
 ```plaintext
 jjwxc-downloader/
-├─ jjwxc.py/
+├─ jjwxc.py
 ├─ chromedriver
 ```
 
