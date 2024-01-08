@@ -18,6 +18,12 @@ jjwxc-downloader/
 ├─ chromedriver
 ```
 
+## Change log
+### 2024-01-08 
+**Added**
+- download book cover
+- txt2epub.py, jjwxc-epub.py for export epub file with book cover, chapters outline
+
 ## How to run
 1. Install the dependencies
 ```plaintext
@@ -34,8 +40,9 @@ python3 jjwxc.py
 ## Note
 Each chapter name begins with ##. This is for later convenience, such as adding indexes when converting the txt to epub.
 
+
 ## Future work
-1. Add conversion from txt to epub
+1. Add conversion from txt to epub ✅
 2. Add GUI for editing metadata of the epub
 
 Please add issue if you need any assistance.

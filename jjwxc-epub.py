@@ -4,9 +4,12 @@ import lxml.html
 from itertools import product
 from time import sleep
 import random
+import pathlib
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+
+from txt2epub import Txt2Epub
 
 chrome_options = Options()
 chrome_options.add_argument('--headless')  # Run Chrome in headless mode
@@ -15,6 +18,7 @@ chrome_options.add_argument('--disable-dev-shm-usage')
 
 svc = webdriver.ChromeService(executable_path='./chromedriver')
 driver = webdriver.Chrome(service=svc, options=chrome_options)
+
 
 def jj_Download(chapters_url, chapters_title, novel_name):
     i = 0
@@ -73,7 +77,7 @@ author = tree.xpath('//span[@itemprop="author"]/text()')[0]
 
 print(f"Download {novel} by {author}")
 
-novel_name = novel + " " + author + ".txt"
+novel_name = novel + ".txt"
 
 image_element = tree.xpath('//img[@class="noveldefaultimage"]')[0]
 image_url = image_element.get('src')
@@ -90,4 +94,5 @@ jj_Download(chapters_url, chapters_title, novel_name)
 
 driver.quit()
 
-
+book = Txt2Epub(book_author=author)
+book.create_epub(input_file=pathlib.Path(novel_name))
