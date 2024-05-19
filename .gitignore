@@ -1,4 +1,5 @@
-chromedriver
+chromedriver*
 *.txt
 *.jpg
 *.epub
+*.py[cod]

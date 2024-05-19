@@ -4,6 +4,7 @@ import lxml.html
 from itertools import product
 from time import sleep
 import random
+import sys
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -13,7 +14,11 @@ chrome_options.add_argument('--headless')  # Run Chrome in headless mode
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--disable-dev-shm-usage')
 
-svc = webdriver.ChromeService(executable_path='./chromedriver')
+# on windows, use the path to the chromedriver.exe
+if sys.platform == 'win32':
+    svc = webdriver.ChromeService(executable_path='./chromedriver.exe')
+else:
+    svc = webdriver.ChromeService()
 driver = webdriver.Chrome(service=svc, options=chrome_options)
 
 def jj_Download(chapters_url, chapters_title, novel_name):
