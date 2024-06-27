@@ -19,6 +19,7 @@ jjwxc-downloader/
 ├─ jjwxc.py
 ├─ chromedriver
 ```
+On Windows, the chromedriver executable should be named `chromedriver.exe`.
 
 ## Change log
 ### 2024-01-08 
