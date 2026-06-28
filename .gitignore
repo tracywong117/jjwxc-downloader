@@ -3,3 +3,4 @@ chromedriver*
 *.jpg
 *.epub
 *.py[cod]
+.DS_Store

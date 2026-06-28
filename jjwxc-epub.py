@@ -9,6 +9,9 @@ import sys
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 from txt2epub import Txt2Epub
 
@@ -34,29 +37,30 @@ def jj_Download(chapters_url, chapters_title, novel_name):
             return
         print(t + " Downloading......")
 
-        # html = requests.get(chapters_url[i - 1]).content
-
         driver.get(chapters_url[i - 1])
 
-        html = driver.page_source
+        # Wait for the noveltext div to appear (JS renders content into it)
+        try:
+            WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, 'div.noveltext'))
+            )
+        except Exception:
+            print(f"WARNING: timed out waiting for noveltext div for chapter: {t}")
+            continue
 
-        # print(html)
-        # print(type(html))
+        # Find the content child div: the one with the most text among noveltext's children
+        try:
+            noveltext_el = driver.find_element(By.CSS_SELECTOR, 'div.noveltext')
+            child_divs = noveltext_el.find_elements(By.XPATH, './div')
+            content_el = max(child_divs, key=lambda el: len(el.text.strip()), default=None)
+            content_text = content_el.text.strip() if content_el and content_el.text.strip() else ''
+        except Exception as e:
+            print(f"WARNING: could not extract content for chapter: {t} ({e})")
+            continue
 
-        selector = lxml.html.fromstring(html)
-
-        # clear_div = selector.xpath('//div[@style="clear:both;"]')
-        # print(clear_div)
-        # content_text = clear_div[0].xpath('following::text()[preceding::div[@style="clear:both;"]]')
-
-        # Use XPath to select the content between <div style="clear:both;"></div> and <div align="right"></div>
-        clear_div = selector.xpath('//div[@style="clear:both;"]')[0]  # Select the first <div> with style="clear:both;"
-        right_div = clear_div.xpath('following::div[@align="right"]')[0]  # Select the <div> following the clear_div
-
-        # Extract the text content between the two divs
-        content_text = right_div.xpath('preceding-sibling::text()')
-        if content_text:
-            content_text = '\n'.join(content_text).strip()  # Join the text elements and remove leading/trailing whitespace
+        if not content_text:
+            print(f"WARNING: empty content for chapter: {t}")
+            continue
 
         # print(content_text)
         name = t
